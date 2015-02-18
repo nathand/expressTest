@@ -9,6 +9,7 @@ var routes = require('./routes/index');
 var auth = require('./routes/auth');
 
 var app = express();
+var db = require('./lib/database');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -22,6 +23,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Configuring Passport
+var passport = require('passport');
+var expressSession = require('express-session');
+app.use(expressSession({secret: 'mySecretKey'}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+// define routes
 app.use('/', routes);
 app.use('/auth', auth);
 
