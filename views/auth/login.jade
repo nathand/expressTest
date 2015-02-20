@@ -1,0 +1,15 @@
+extends ../layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+  div.register
+    form(name="login", action="/auth/login", method="post")
+      input(type="hidden", name="_csrf", value="key")
+      label username
+      input(type="text", name="username")
+      br
+      label password
+      input(type="password", name="password")
+      br
+      input(type="submit")
