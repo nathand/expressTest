@@ -20,7 +20,6 @@ router.post('/register', function(req, res, next) {
   console.log(req.body);
   User.register(new User({ username: req.body.username}), req.body.password, function(err, account) {
     if (err) {
-      res.send('failed to authenticate');
       res.redirect('/auth');
     }
     passport.authenticate('local')(req, res, function() {

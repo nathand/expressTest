@@ -9,7 +9,6 @@ var routes = require('./routes/index');
 var auth = require('./routes/auth');
 
 var app = express();
-var db = require('./lib/database');
 
 // Configuring Passport
 var passport = require('passport');
@@ -27,10 +26,11 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
-
-app.use(expressSession({secret: 'mySecretKey'}));
+app.use(expressSession({
+  secret: 'mySecretKey',
+  resave: false,
+  saveUninitialized: false
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -38,8 +38,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/auth', auth);
 
-var Account = require('./models/user');
-passport.use(new localStrategy(Account.authenticate));
+var User = require('./models/user');
+passport.use(new localStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+var db = require('./lib/database');
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
