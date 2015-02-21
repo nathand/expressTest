@@ -5,7 +5,7 @@ block content
   p Welcome to #{title}
   div.register
     form(name="register", action="/auth/register", method="post")
-      input(type="hidden", name="_csrf", value="key")
+      input(type="hidden", name="_csrf", value="#{_csrf}")
       label username
       input(type="text", name="username")
       br
