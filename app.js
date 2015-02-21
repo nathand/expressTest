@@ -4,18 +4,14 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
 var routes = require('./routes/index');
 var auth = require('./routes/auth');
-
-var app = express();
-
-// Configuring Passport
 var passport = require('passport');
 var expressSession = require('express-session');
 var localStrategy = require('passport-local').Strategy;
+var lusca = require('lusca');
 
-
+var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -30,6 +26,14 @@ app.use(expressSession({
   secret: 'mySecretKey',
   resave: false,
   saveUninitialized: false
+}));
+app.use(lusca({
+  csrf: true,
+  csp: {},
+  xframe: 'SAMEORIGIN',
+  p3p: 'ABCDEF',
+  hsts: {maxAge: 31536000, includeSubDomains: true},
+  xssProtection: true
 }));
 app.use(passport.initialize());
 app.use(passport.session());
