@@ -5,6 +5,7 @@ var router = express.Router();
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
+  console.log(req.isAuthenticated());
   res.render('auth/index', { title: 'Authenication' });
 });
 router.get('/login', function(req, res, next) {
@@ -28,6 +29,7 @@ router.post('/register', function(req, res, next) {
   });
 });
 router.get('/logout', function(req, res, next) {
+  req.logout();
   res.send('respond with a logout');
 });
 
