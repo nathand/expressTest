@@ -5,8 +5,10 @@ var router = express.Router();
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  console.log(req.isAuthenticated());
-  res.render('auth/index', { title: 'Authenication' });
+  if (req.isAuthenticated()) {
+    return res.render('auth/index', { title: 'Authenticated', isAuth: true, user: req.user.username });
+  }
+  res.render('auth/index', { title: 'Authenicate', isAuth: false });
 });
 router.get('/login', function(req, res, next) {
   res.render('auth/login', { title: 'Login' });
@@ -18,7 +20,6 @@ router.get('/register', function(req, res, next) {
   res.render('auth/register', { title: 'Register' });
 });
 router.post('/register', function(req, res, next) {
-  console.log(req.body);
   User.register(new User({ username: req.body.username}), req.body.password, function(err, account) {
     if (err) {
       res.redirect('/auth');
