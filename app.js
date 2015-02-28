@@ -1,11 +1,10 @@
 var express = require('express');
+var enrouten = require('express-enrouten');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var routes = require('./routes/index');
-var auth = require('./routes/auth');
 var passport = require('passport');
 var expressSession = require('express-session');
 var localStrategy = require('passport-local').Strategy;
@@ -39,8 +38,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 // define routes
-app.use('/', routes);
-app.use('/auth', auth);
+app.use(enrouten({ directory: 'routes' }));
 
 var User = require('./models/user');
 passport.use(new localStrategy(User.authenticate()));
